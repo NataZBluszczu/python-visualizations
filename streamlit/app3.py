@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 st.set_page_config(page_title="Zadanie 3: Dashboard", layout="wide")
-st.title("🚀 Zaawansowany Dashboard Analityczny")
+st.title("Zaawansowany Dashboard Analityczny")
 
 @st.cache_data
 def load_data():
@@ -15,13 +15,13 @@ df = load_data()
 num_cols = df.select_dtypes(include=['number']).columns.tolist()
 cat_cols = df.select_dtypes(include=['object', 'bool']).columns.tolist()
 
-st.sidebar.header("🛠️ Konfiguracja Dashboardu")
+st.sidebar.header("Konfiguracja Dashboardu")
 
 with st.sidebar.expander("1. Wybór Zmiennych", expanded=True):
     val_x = st.selectbox("Zmienna X (Główna):", num_cols, index=0)
-    val_y = st.selectbox("Zmienna Y (Tylko dla Scatter Plot):", num_cols, index=1 if len(num_cols) > 1 else 0)
+    val_y = st.selectbox("Zmienna Y (dla Scatter Plot):", num_cols, index=1 if len(num_cols) > 1 else 0)
     
-    group_col = st.selectbox("Grupowanie (Hue/Kolor):", ["Brak"] + cat_cols)
+    group_col = st.selectbox("Grupowanie:", ["Brak"] + cat_cols)
     grouping = None if group_col == "Brak" else group_col
 
 with st.sidebar.expander("2. Typ i Styl Wykresu", expanded=True):
@@ -32,7 +32,7 @@ with st.sidebar.expander("2. Typ i Styl Wykresu", expanded=True):
 
 df_plot = df.sample(2000, random_state=42) if len(df) > 2000 else df
 
-tab_viz, tab_stat = st.tabs(["📊 Wizualizacja Danych", "📈 Podsumowanie Statystyczne"])
+tab_viz, tab_stat = st.tabs(["Wizualizacja Danych", "Podsumowanie Statystyczne"])
 
 with tab_viz:
     st.subheader(f"Analiza: {chart_type}")

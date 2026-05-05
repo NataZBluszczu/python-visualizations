@@ -6,7 +6,7 @@ import seaborn as sns
 
 st.set_page_config(page_title="Zadanie 2: Filtrowanie", layout="wide")
 
-st.title("🎛️ Interaktywny Dashboard Danych")
+st.title("Interaktywny Dashboard Danych")
 
 @st.cache_data
 def load_data():
@@ -14,7 +14,7 @@ def load_data():
 
 df = load_data()
 
-st.sidebar.header("⚙️ Ustawienia Filtrów")
+st.sidebar.header("Ustawienia Filtrów")
 
 cat_cols = df.select_dtypes(include=['object', 'bool']).columns.tolist()
 num_cols = df.select_dtypes(include=['number']).columns.tolist()
@@ -60,7 +60,7 @@ if not df_filtered.empty:
     col1, col2 = st.columns([3, 2])
     
     with col1:
-        st.write("### 📊 Średnie wartości (Wykres słupkowy)")
+        st.write("### Średnie wartości (Wykres słupkowy)")
         fig, ax = plt.subplots(figsize=(10, 6))
         
         sns.barplot(
@@ -79,7 +79,7 @@ if not df_filtered.empty:
         st.pyplot(fig)
         
     with col2:
-        st.write("### 📋 Podgląd danych")
+        st.write("### Podgląd danych")
         cols_to_show = list(set([selected_cat_col, selected_num_col] + list(df.columns[:3])))
         st.dataframe(df_filtered[cols_to_show], height=400, use_container_width=True)
 else:

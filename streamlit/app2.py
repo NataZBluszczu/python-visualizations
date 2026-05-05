@@ -4,25 +4,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Ustawienie szerokiego układu strony
 st.set_page_config(page_title="Zadanie 2: Filtrowanie", layout="wide")
 
 st.title("🎛️ Interaktywny Dashboard Danych")
 
-# 1. WCZYTANIE DANYCH (cache)
 @st.cache_data
 def load_data():
     return pd.read_csv("dataset.csv", sep=None, engine='python', encoding='utf-8', on_bad_lines='skip')
 
 df = load_data()
 
-# 2. PANEL BOCZNY (st.sidebar) - Filtry
 st.sidebar.header("⚙️ Ustawienia Filtrów")
 
 cat_cols = df.select_dtypes(include=['object', 'bool']).columns.tolist()
 num_cols = df.select_dtypes(include=['number']).columns.tolist()
 
-# Filtr Kategoryczny
 if cat_cols:
     selected_cat_col = st.sidebar.selectbox("1. Wybierz kolumnę kategoryczną:", cat_cols)
     unique_vals = sorted(df[selected_cat_col].dropna().unique().tolist())
@@ -33,7 +29,6 @@ else:
     selected_vals = []
     st.sidebar.warning("Brak kolumn tekstowych/kategorycznych w zbiorze.")
 
-# Filtr Numeryczny
 if num_cols:
     selected_num_col = st.sidebar.selectbox("2. Wybierz kolumnę numeryczną:", num_cols)
     min_val = float(df[selected_num_col].min())
@@ -48,7 +43,6 @@ else:
     range_val = None
     st.sidebar.warning("Brak kolumn numerycznych w zbiorze.")
 
-# 3. FILTROWANIE DANYCH
 mask = pd.Series(True, index=df.index)
 
 if cat_cols and selected_vals:
@@ -59,7 +53,6 @@ if num_cols and range_val:
 
 df_filtered = df[mask]
 
-# 4. GŁÓWNY UKŁAD STRONY
 st.write("---")
 st.subheader(f"Znaleziono rekordów: **{len(df_filtered):,}**")
 
@@ -70,16 +63,14 @@ if not df_filtered.empty:
         st.write("### 📊 Średnie wartości (Wykres słupkowy)")
         fig, ax = plt.subplots(figsize=(10, 6))
         
-        # ZMIANA NA WYKRES SŁUPKOWY
         sns.barplot(
             data=df_filtered,
             x=selected_cat_col,
             y=selected_num_col,
             palette="viridis",
             ax=ax,
-            errorbar=None # Ukrywa czarne, pionowe kreski (odchylenie standardowe) dla czystszego wyglądu!
+            errorbar=None 
         )
-        # Obracamy etykiety osi X
         plt.xticks(rotation=45, ha='right')
         ax.set_title(f"Średnia '{selected_num_col}' dla każdej wartości z '{selected_cat_col}'", pad=15)
         ax.set_xlabel("")
